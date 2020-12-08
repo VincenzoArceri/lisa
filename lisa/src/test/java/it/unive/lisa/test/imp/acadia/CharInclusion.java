@@ -3,11 +3,13 @@ package it.unive.lisa.test.imp.acadia;
 import java.util.HashSet;
 import java.util.Set;
 
+import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.nonrelational.BaseNonRelationalValueDomain;
 import it.unive.lisa.cfg.type.Type;
 import it.unive.lisa.symbolic.value.BinaryOperator;
 import it.unive.lisa.symbolic.value.Constant;
+import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
 
@@ -200,4 +202,78 @@ public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
 		return result;
 	}
 
+	@Override
+	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNullConstant() {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTypeConversion(Type type, CharInclusion right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, CharInclusion arg) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, CharInclusion left,
+			CharInclusion right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, CharInclusion left,
+			CharInclusion middle, CharInclusion right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((may == null) ? 0 : may.hashCode());
+		result = prime * result + ((must == null) ? 0 : must.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CharInclusion other = (CharInclusion) obj;
+		if (may == null) {
+			if (other.may != null)
+				return false;
+		} else if (!may.equals(other.may))
+			return false;
+		if (must == null) {
+			if (other.must != null)
+				return false;
+		} else if (!must.equals(other.must))
+			return false;
+		return true;
+	}
 }

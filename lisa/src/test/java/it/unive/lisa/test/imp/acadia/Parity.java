@@ -226,5 +226,26 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Parity left, Parity middle, Parity right) {
 		return Satisfiability.BOTTOM;
 	}
-}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((parity == null) ? 0 : parity.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Parity other = (Parity) obj;
+		if (parity != other.parity)
+			return false;
+		return true;
+	}
+}

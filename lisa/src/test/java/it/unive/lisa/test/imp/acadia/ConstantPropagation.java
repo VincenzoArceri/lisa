@@ -1,11 +1,13 @@
 package it.unive.lisa.test.imp.acadia;
 
+import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.nonrelational.BaseNonRelationalValueDomain;
 import it.unive.lisa.cfg.type.Type;
 import it.unive.lisa.symbolic.types.IntType;
 import it.unive.lisa.symbolic.value.BinaryOperator;
 import it.unive.lisa.symbolic.value.Constant;
+import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.NullConstant;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
@@ -214,5 +216,49 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 		} else if (!value.equals(other.value))
 			return false;
 		return true;
+	}
+
+	@Override
+	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNullConstant() {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTypeConversion(Type type, ConstantPropagation right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, ConstantPropagation arg) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, ConstantPropagation left,
+			ConstantPropagation right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, ConstantPropagation left,
+			ConstantPropagation middle, ConstantPropagation right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
 	}
 }

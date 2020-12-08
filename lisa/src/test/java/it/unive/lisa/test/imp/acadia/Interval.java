@@ -1,10 +1,12 @@
 package it.unive.lisa.test.imp.acadia;
 
+import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.nonrelational.BaseNonRelationalValueDomain;
 import it.unive.lisa.cfg.type.Type;
 import it.unive.lisa.symbolic.value.BinaryOperator;
 import it.unive.lisa.symbolic.value.Constant;
+import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
 
@@ -136,5 +138,73 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 	@Override
 	protected boolean lessOrEqualAux(Interval other) throws SemanticException {
 		return getInterval().isLessThen(other.getInterval());
-	}	
+	}
+
+	@Override
+	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNullConstant() {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTypeConversion(Type type, Interval right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, Interval arg) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, Interval left, Interval right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Interval left, Interval middle,
+			Interval right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((val == null) ? 0 : val.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Interval other = (Interval) obj;
+		if (val == null) {
+			if (other.val != null)
+				return false;
+		} else if (!val.equals(other.val))
+			return false;
+		return true;
+	}
 }

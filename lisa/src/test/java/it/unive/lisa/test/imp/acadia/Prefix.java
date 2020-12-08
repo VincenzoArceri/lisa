@@ -1,10 +1,12 @@
 package it.unive.lisa.test.imp.acadia;
 
+import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.nonrelational.BaseNonRelationalValueDomain;
 import it.unive.lisa.cfg.type.Type;
 import it.unive.lisa.symbolic.value.BinaryOperator;
 import it.unive.lisa.symbolic.value.Constant;
+import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
 
@@ -171,5 +173,48 @@ public class Prefix extends BaseNonRelationalValueDomain<Prefix> {
 		} else if (!prefix.equals(other.prefix))
 			return false;
 		return true;
+	}
+
+	@Override
+	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNullConstant() {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTypeConversion(Type type, Prefix right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, Prefix arg) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, Prefix left, Prefix right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
+	}
+
+	@Override
+	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Prefix left, Prefix middle,
+			Prefix right) {
+		// TODO Auto-generated method stub
+		return Satisfiability.UNKNOWN;
 	}
 }

@@ -1,7 +1,0 @@
-class typing {
-	test() {
-		x = new int[5];
-		y = new string[5];
-		z = new string[5];
-	}
-}
