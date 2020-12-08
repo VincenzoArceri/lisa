@@ -7,7 +7,6 @@ import it.unive.lisa.cfg.type.Type;
 import it.unive.lisa.symbolic.value.BinaryOperator;
 import it.unive.lisa.symbolic.value.Constant;
 import it.unive.lisa.symbolic.value.Identifier;
-import it.unive.lisa.symbolic.value.NullConstant;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
 
@@ -168,6 +167,8 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return right;
 			else if (right.isZero())
 				return left;
+			else if (left.equals(right))
+				return left;
 			else
 				return top();
 		case NUMERIC_DIV:
@@ -197,8 +198,10 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return right.opposite();
 			else if (right.isZero())
 				return left.opposite();
-			else
+			else if (left.equals(right))
 				return top();
+			else
+				return left;
 		default:
 			break;
 		}
@@ -275,27 +278,22 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 
 	@Override
 	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, Sign left, Sign right) {
+		if (left.isTop() || right.isTop())
+			return Satisfiability.UNKNOWN;
 		
 		switch(operator) {
 		case COMPARISON_EQ:
-			if (left.isTop() || right.isTop())
-				return Satisfiability.UNKNOWN;
-			else if (!left.equals(right))
-				return Satisfiability.NOT_SATISFIED;
-			else if (isZero())
-				return Satisfiability.SATISFIED;
-			else
-				return Satisfiability.UNKNOWN;
+			return left.eq(right);
 		case COMPARISON_GE:
-			break;
+			return left.eq(right).or(left.gt(right));
 		case COMPARISON_GT:
-			break;
-		case COMPARISON_LE:
-			break;
-		case COMPARISON_LT:
-			break;
+			return left.gt(right);
+		case COMPARISON_LE: // e1 <= e2 same as !(e1 > e2)
+			return left.gt(right).negate();
+		case COMPARISON_LT: // e1 < e2 -> !(e1 >= e2) && !(e1 == e2) 
+			return left.gt(right).negate().and(left.eq(right).negate());
 		case COMPARISON_NE:
-			break;
+			return left.eq(right).negate();
 		case STRING_CONTAINS:
 		case STRING_ENDS_WITH:
 		case STRING_EQUALS:
@@ -315,9 +313,28 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		return Satisfiability.UNKNOWN;
 	}
 
+	private Satisfiability eq(Sign other) {
+		if (!this.equals(other))
+			return Satisfiability.NOT_SATISFIED;
+		else if (isZero())
+			return Satisfiability.SATISFIED;
+		else
+			return Satisfiability.UNKNOWN;
+	}
+	
+	private Satisfiability gt(Sign other) {
+		if (this.equals(other))
+			return this.isZero() ? Satisfiability.NOT_SATISFIED : Satisfiability.UNKNOWN;
+		else if (this.isZero())
+			return other.isPositive() ? Satisfiability.NOT_SATISFIED : Satisfiability.SATISFIED;
+		else if (this.isPositive())
+			return Satisfiability.SATISFIED;
+		else
+			return Satisfiability.NOT_SATISFIED;
+	}
+	
 	@Override
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Sign left, Sign middle, Sign right) {
 		return Satisfiability.BOTTOM;
 	}
 }
-

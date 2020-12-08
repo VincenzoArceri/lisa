@@ -31,7 +31,6 @@ import it.unive.lisa.symbolic.value.ValueExpression;
 public abstract class BaseNonRelationalValueDomain<T extends BaseNonRelationalValueDomain<T>> extends BaseLattice<T>
 implements NonRelationalValueDomain<T> {
 
-
 	@Override
 	public final Satisfiability satisfies(SymbolicExpression expression, ValueEnvironment<T> environment) {	
 		if (expression instanceof Identifier)
@@ -57,7 +56,7 @@ implements NonRelationalValueDomain<T> {
 			UnaryExpression unary = (UnaryExpression) expression;
 
 			if (unary.getOperator() == UnaryOperator.LOGICAL_NOT)
-				return satisfies(unary, environment).negate();
+				return satisfies(unary.getExpression(), environment).negate();
 			else {			
 				T arg = eval((ValueExpression) unary.getExpression(), environment);
 				if (arg.isBottom())
@@ -266,7 +265,7 @@ implements NonRelationalValueDomain<T> {
 	 * Yields the satisfiability of the null constant {@link NullConstant}. 
 	 * 
 	 * @return {@link Satisfiability#SATISFIED} is the expression is satisfied by
-	 *         the values of this domain, {@link Satisfiability#NOT_SATISFIED} if it
+	 *         this domain, {@link Satisfiability#NOT_SATISFIED} if it
 	 *         is not satisfied, or {@link Satisfiability#UNKNOWN} if it is either
 	 *         impossible to determine if it satisfied, or if it is satisfied by
 	 *         some values and not by some others (this is equivalent to a TOP

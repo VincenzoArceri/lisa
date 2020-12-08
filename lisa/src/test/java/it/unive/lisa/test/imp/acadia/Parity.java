@@ -141,8 +141,6 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 			break;
 		case NUMERIC_ADD:
 		case NUMERIC_SUB:
-			if (right.isTop() || left.isTop())
-				return top();
 			if (right.equals(left))
 				return even();
 			else
@@ -155,9 +153,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 			else
 				return odd();
 		case NUMERIC_DIV:
-			if (right.isTop() || left.isTop())
-				return top();
-			else if (left.isOdd())
+			if (left.isOdd())
 				return odd();
 			else if (right.isOdd())
 				return even();

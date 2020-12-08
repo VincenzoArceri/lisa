@@ -28,6 +28,7 @@ public class TypesCollectionTest {
 		lisa.setDumpTypeInference(true);
 		lisa.setJsonOutput(true);
 		lisa.setWorkdir("test-outputs/type-inference");
+		
 		try {
 			lisa.run();
 		} catch (AnalysisException e) {
