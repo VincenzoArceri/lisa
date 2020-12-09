@@ -4,11 +4,9 @@ import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.nonrelational.BaseNonRelationalValueDomain;
 import it.unive.lisa.cfg.type.Type;
-import it.unive.lisa.symbolic.types.IntType;
 import it.unive.lisa.symbolic.value.BinaryOperator;
 import it.unive.lisa.symbolic.value.Constant;
 import it.unive.lisa.symbolic.value.Identifier;
-import it.unive.lisa.symbolic.value.NullConstant;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
 
@@ -20,15 +18,15 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	private final boolean isTop, isBottom;
 
-	private final Constant value;
+	private final Integer value;
 
-	private ConstantPropagation(Constant value, boolean isTop, boolean isBottom) {
+	private ConstantPropagation(Integer value, boolean isTop, boolean isBottom) {
 		this.value = value;
 		this.isTop = isTop;
 		this.isBottom = isBottom;
 	}
 
-	public ConstantPropagation(Constant value) {
+	public ConstantPropagation(Integer value) {
 		this(value, false, false);
 	}
 
@@ -63,37 +61,33 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected ConstantPropagation evalNullConstant() {
-		return new ConstantPropagation(NullConstant.INSTANCE);
+		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation evalNonNullConstant(Constant constant) {
-		return new ConstantPropagation(constant);
+		if (constant.getValue() instanceof Integer)
+			return new ConstantPropagation((Integer) constant.getValue());
+		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation evalTypeConversion(Type type, ConstantPropagation arg) {
-		// TODO Auto-generated method stub
-		return null;
+		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation evalUnaryExpression(UnaryOperator operator, ConstantPropagation arg) {
-		if (arg.isTop())
-			return top();
-		else if (arg.isBottom())
-			return bottom();
 
 		switch (operator) {
 		case LOGICAL_NOT:
 			break;
 		case NUMERIC_NEG:
-			if (arg.value.getValue() instanceof Integer)
-				return new ConstantPropagation(new Constant(IntType.INSTANCE, 0 - ((Integer) arg.value.getValue())));
+				return new ConstantPropagation(0 - value);
 		case STRING_LENGTH:
 			break;
 		default:
-			return top();
+			return bottom();
 		}
 
 		return bottom();
@@ -101,9 +95,6 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected ConstantPropagation evalBinaryExpression(BinaryOperator operator, ConstantPropagation left, ConstantPropagation right) {
-		if (left.isTop() || right.isTop())
-			return TOP;
-		
 		switch(operator) {
 		case COMPARISON_EQ:
 			break;
@@ -122,19 +113,19 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 		case LOGICAL_OR:
 			break;
 		case NUMERIC_ADD:
-			if (left.value.getValue() instanceof Integer && right.value.getValue() instanceof Integer)
-				return new ConstantPropagation(new Constant(IntType.INSTANCE, ((Integer) left.value.getValue()) + ((Integer) right.value.getValue())));
+				return new ConstantPropagation(left.value + right.value);
 		case NUMERIC_DIV:
-			break;
+			if (left.value % right.value == 0)
+				return top();
+			else
+				return new ConstantPropagation(left.value / right.value);
 		case NUMERIC_MOD:
-			break;
+			return new ConstantPropagation(left.value % right.value);
 		case NUMERIC_MUL:
-			if (left.value.getValue() instanceof Integer && right.value.getValue() instanceof Integer)
-				return new ConstantPropagation(new Constant(IntType.INSTANCE, ((Integer) left.value.getValue()) * ((Integer) right.value.getValue())));
+			return new ConstantPropagation(left.value * right.value);
 		case NUMERIC_SUB:
-			if (left.value.getValue() instanceof Integer && right.value.getValue() instanceof Integer)
-				return new ConstantPropagation(new Constant(IntType.INSTANCE, ((Integer) left.value.getValue()) - ((Integer) right.value.getValue())));
-		case STRING_CONCAT:
+			return new ConstantPropagation(left.value - right.value);
+	case STRING_CONCAT:
 			break;
 		case STRING_CONTAINS:
 			break;
@@ -149,31 +140,19 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 		default:
 			break;
 		}
-		return TOP;
+		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation evalTernaryExpression(TernaryOperator operator, ConstantPropagation left, ConstantPropagation middle, ConstantPropagation right) {
-		if (left.isTop() || right.isTop())
-			return new ConstantPropagation(true, false);
-		
-		switch(operator) {
-		case STRING_REPLACE:
-			break;
-		case STRING_SUBSTRING:
-			break;
-		default:
-			break;
-		}
-		
-		return TOP;
+		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation lubAux(ConstantPropagation other) throws SemanticException {
 		if (equals(other))
 			return other;
-		return new ConstantPropagation(true, false);
+		return top();
 	}
 
 	@Override
@@ -183,8 +162,7 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected boolean lessOrEqualAux(ConstantPropagation other) throws SemanticException {
-		// TODO Auto-generated method stub
-		return false;
+		return value <= other.value;
 	}
 
 	@Override
@@ -226,39 +204,64 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected Satisfiability satisfiesNullConstant() {
-		// TODO Auto-generated method stub
-		return Satisfiability.UNKNOWN;
+		return Satisfiability.BOTTOM;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
-		// TODO Auto-generated method stub
-		return Satisfiability.UNKNOWN;
+		return Satisfiability.BOTTOM;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTypeConversion(Type type, ConstantPropagation right) {
-		// TODO Auto-generated method stub
-		return Satisfiability.UNKNOWN;
+		return Satisfiability.BOTTOM;
 	}
 
 	@Override
 	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, ConstantPropagation arg) {
-		// TODO Auto-generated method stub
-		return Satisfiability.UNKNOWN;
+		return Satisfiability.BOTTOM;
 	}
 
 	@Override
 	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, ConstantPropagation left,
 			ConstantPropagation right) {
-		// TODO Auto-generated method stub
-		return Satisfiability.UNKNOWN;
+		
+		switch(operator) {
+		case COMPARISON_EQ:
+			return left.value == right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
+		case COMPARISON_GE:
+			return left.value >= right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
+		case COMPARISON_GT:
+			return left.value > right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
+		case COMPARISON_LE:
+			return left.value <= right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
+		case COMPARISON_LT:
+			return left.value < right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
+		case COMPARISON_NE:
+			return left.value != right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
+		case LOGICAL_AND:
+		case LOGICAL_OR:
+		case NUMERIC_ADD:
+		case NUMERIC_DIV:
+		case NUMERIC_MOD:
+		case NUMERIC_MUL:
+		case NUMERIC_SUB:
+		case STRING_CONCAT:
+		case STRING_CONTAINS:
+		case STRING_ENDS_WITH:
+		case STRING_EQUALS:
+		case STRING_INDEX_OF:
+		case STRING_STARTS_WITH:
+		default:
+			break;
+		}
+		
+		return Satisfiability.BOTTOM;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, ConstantPropagation left,
 			ConstantPropagation middle, ConstantPropagation right) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 }

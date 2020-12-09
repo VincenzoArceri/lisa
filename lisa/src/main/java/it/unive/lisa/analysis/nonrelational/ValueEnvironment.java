@@ -58,7 +58,6 @@ public final class ValueEnvironment<T extends NonRelationalValueDomain<T>>
 
 	@Override
 	public ValueEnvironment<T> assume(ValueExpression expression) throws SemanticException {
-
 		if (lattice.satisfies(expression, this) == Satisfiability.NOT_SATISFIED)
 			return bottom();
 		else if (lattice.satisfies(expression, this) == Satisfiability.SATISFIED)
