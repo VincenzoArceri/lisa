@@ -1,7 +1,9 @@
 class typing {
 
-	heap() {
-		x = new int[5];
-		z = x.f;
+	test3(i) {
+		while (i > 5)
+			i = i + 1;
+		return i;
 	}
+	
 }

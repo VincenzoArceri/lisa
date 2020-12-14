@@ -120,7 +120,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 
 	@Override
 	protected Sign evalUnaryExpression(UnaryOperator operator, Sign arg) {
-	
 		switch (operator) {
 		case NUMERIC_NEG:
 			if (arg.isPositive())
@@ -143,9 +142,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 
 	@Override
 	protected Sign evalBinaryExpression(BinaryOperator operator, Sign left, Sign right) {
-		if (left.isBottom() || right.isBottom())
-			return bottom();
-
 		switch (operator) {
 		case COMPARISON_EQ:
 		case COMPARISON_GE:
