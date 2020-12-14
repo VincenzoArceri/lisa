@@ -42,7 +42,7 @@ public final class ValueEnvironment<T extends NonRelationalValueDomain<T>>
 	@Override
 	public ValueEnvironment<T> assign(Identifier id, ValueExpression value) {
 		Map<Identifier, T> func;
-		if (function == null) 
+		if (function == null)
 			func = new HashMap<>();
 		else
 			func = new HashMap<>(function);
@@ -63,7 +63,8 @@ public final class ValueEnvironment<T extends NonRelationalValueDomain<T>>
 		else if (lattice.satisfies(expression, this) == Satisfiability.SATISFIED)
 			return this;
 		else
-			//TODO: a more precise filtering is needed when satisfiability of expression is unknown
+			// TODO: a more precise filtering is needed when satisfiability of
+			// expression is unknown
 			return this;
 	}
 

@@ -83,8 +83,9 @@ public final class HeapEnvironment<T extends NonRelationalHeapDomain<T>>
 		else if (lattice.satisfies(expression, this) == Satisfiability.SATISFIED)
 			return this;
 		else
-			//TODO: a more precise filtering is needed when satisfiability of expression is unknown
-			return this;		
+			// TODO: a more precise filtering is needed when satisfiability of
+			// expression is unknown
+			return this;
 	}
 
 	@Override
