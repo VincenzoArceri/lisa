@@ -1,9 +1,20 @@
 class typing {
 
-	test3(i) {
-		while (i > 5)
-			i = i + 1;
+	sign_parity_example() {
+		i = 2;
+		max = 10;
+		while (i < max) 
+			i = i + 2;
+
 		return i;
 	}
-	
+
+	ub_example() {
+		if (y < z) 
+			x = y - 1;
+		else
+			x = z - 1;
+			
+		return x;
+	}
 }

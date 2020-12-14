@@ -207,7 +207,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 
 	@Override
 	protected Sign evalTernaryExpression(TernaryOperator operator, Sign left, Sign middle, Sign right) {
-		return bottom();
+		return top();
 	}
 
 	@Override

@@ -13,19 +13,19 @@ import it.unive.lisa.symbolic.value.UnaryOperator;
 public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 
-	private final IntervalValue val;
+	private final Intv val;
 
-	private Interval(IntervalValue val) {
+	private Interval(Intv val) {
 		this.val = val;
 	}
 
 	public Interval() {
-		this(IntervalValue.mkTop());
+		this(Intv.mkTop());
 	}
 
 	@Override
 	public Interval top() {
-		return new Interval(IntervalValue.mkTop());
+		return new Interval(Intv.mkTop());
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 	@Override
 	public Interval bottom() {
-		return new Interval(IntervalValue.mkBottom());
+		return new Interval(Intv.mkBottom());
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 		return val.toString();
 	}
 
-	public IntervalValue getInterval() {
+	public Intv getInterval() {
 		return val;
 	}
 
@@ -60,7 +60,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 	@Override
 	protected Interval evalNonNullConstant(Constant constant) {
 		if (constant.getValue() instanceof Integer) 
-			return new Interval(new IntervalValue((Integer) constant.getValue(), (Integer) constant.getValue()));
+			return new Interval(new Intv((Integer) constant.getValue(), (Integer) constant.getValue()));
 
 		return bottom();
 	}
@@ -75,9 +75,9 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 		switch (operator) {
 		case NUMERIC_NEG:
-			return new Interval(new IntervalValue(0, null).mul(new IntervalValue(-1, -1)));
+			return new Interval(new Intv(0, null).mul(new Intv(-1, -1)));
 		case STRING_LENGTH: 
-			return new Interval(new IntervalValue(0, null));
+			return new Interval(new Intv(0, null));
 		case LOGICAL_NOT:
 		default:
 			break;
@@ -132,7 +132,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 	@Override
 	protected Interval wideningAux(Interval other) throws SemanticException {
-		return new Interval(other.getInterval().wideningAux(getInterval()));
+		return new Interval(getInterval().wideningAux(other.getInterval()));
 	}
 
 	@Override

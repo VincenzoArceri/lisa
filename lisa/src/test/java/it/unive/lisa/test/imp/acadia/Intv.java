@@ -13,9 +13,9 @@ import java.util.stream.IntStream;
  * 
  * @author Luca Negrini
  */
-public class IntervalValue {
+public class Intv {
 
-	private static final IntervalValue TOP = new IntervalValue() {
+	private static final Intv TOP = new Intv() {
 		@Override
 		public boolean equals(Object obj) {
 			return this == obj;
@@ -27,7 +27,7 @@ public class IntervalValue {
 		}
 	};
 
-	private static final IntervalValue BOTTOM = new IntervalValue() {
+	private static final Intv BOTTOM = new Intv() {
 		@Override
 		public boolean equals(Object obj) {
 			return this == obj;
@@ -40,7 +40,7 @@ public class IntervalValue {
 
 		@Override
 		public String toString() {
-			return "_|_";
+			return "BOTTOM";
 		}
 	};
 
@@ -54,7 +54,7 @@ public class IntervalValue {
 	 */
 	private final Integer high;
 
-	private IntervalValue() {
+	private Intv() {
 		low = null;
 		high = null;
 	}
@@ -65,7 +65,7 @@ public class IntervalValue {
 	 * @param low  the lower bound
 	 * @param high the upper bound
 	 */
-	public IntervalValue(Integer low, Integer high) {
+	public Intv(Integer low, Integer high) {
 		this.low = low;
 		this.high = high;
 	}
@@ -97,11 +97,11 @@ public class IntervalValue {
 		return high;
 	}
 
-	public static IntervalValue mkTop() {
+	public static Intv mkTop() {
 		return TOP;
 	}
 	
-	public static IntervalValue mkBottom() {
+	public static Intv mkBottom() {
 		return BOTTOM;
 	}
 	
@@ -122,7 +122,7 @@ public class IntervalValue {
 		return high == null;
 	}
 
-	public IntervalValue bottom() {
+	public Intv bottom() {
 		return getBottom();
 	}
 
@@ -131,11 +131,11 @@ public class IntervalValue {
 	 * 
 	 * @return the bottom element
 	 */
-	public static IntervalValue getBottom() {
+	public static Intv getBottom() {
 		return BOTTOM;
 	}
 
-	public IntervalValue top() {
+	public Intv top() {
 		return getTop();
 	}
 
@@ -144,17 +144,17 @@ public class IntervalValue {
 	 * 
 	 * @return the top element
 	 */
-	public static IntervalValue getTop() {
+	public static Intv getTop() {
 		return TOP;
 	}
 
-	protected IntervalValue lubAux(IntervalValue other) {
+	protected Intv lubAux(Intv other) {
 		Integer newLow = lowIsMinusInfinity() || other.lowIsMinusInfinity() ? null : Math.min(low, other.low);
 		Integer newHigh = highIsPlusInfinity() || other.highIsPlusInfinity() ? null : Math.max(high, other.high);
-		return new IntervalValue(newLow, newHigh);
+		return new Intv(newLow, newHigh);
 	}
 
-	protected IntervalValue wideningAux(IntervalValue other) {
+	protected Intv wideningAux(Intv other) {
 		Integer maxI1 = highIsPlusInfinity() ? Integer.MAX_VALUE : high;
 		Integer maxI2 = other.highIsPlusInfinity() ? Integer.MAX_VALUE : other.high;
 		Integer minI1 = lowIsMinusInfinity() ? Integer.MIN_VALUE : low;
@@ -170,10 +170,10 @@ public class IntervalValue {
 			newHigh = null;
 		else
 			newHigh = high;
-		return new IntervalValue(newLow, newHigh);
+		return new Intv(newLow, newHigh);
 	}
 
-	private boolean inRelationWith(IntervalValue other) {
+	private boolean inRelationWith(Intv other) {
 		boolean lowIsFine = false;
 		if (low == other.low)
 			lowIsFine = true;
@@ -210,7 +210,7 @@ public class IntervalValue {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		IntervalValue other = (IntervalValue) obj;
+		Intv other = (Intv) obj;
 		if (high == null) {
 			if (other.high != null)
 				return false;
@@ -229,7 +229,7 @@ public class IntervalValue {
 		return "[" + (lowIsMinusInfinity() ? "-Inf" : low) + ", " + (highIsPlusInfinity() ? "+Inf" : high) + "]";
 	}
 
-	public IntervalValue plus(IntervalValue other) {
+	public Intv plus(Intv other) {
 		Integer newLow, newHigh;
 
 		if (lowIsMinusInfinity() || other.lowIsMinusInfinity())
@@ -242,14 +242,14 @@ public class IntervalValue {
 		else
 			newHigh = high + other.high;
 
-		return new IntervalValue(newLow, newHigh);
+		return new Intv(newLow, newHigh);
 	}
 
-	public IntervalValue diff(IntervalValue other) {
-		return plus(other.mul(new IntervalValue(-1, -1)));
+	public Intv diff(Intv other) {
+		return plus(other.mul(new Intv(-1, -1)));
 	}
 
-	public IntervalValue mul(IntervalValue other) {
+	public Intv mul(Intv other) {
 		SortedSet<Integer> boundSet = new TreeSet<>();
 		Integer low1 = low;
 		Integer high1 = high;
@@ -270,7 +270,7 @@ public class IntervalValue {
 		// x2y2
 		multiplyBounds(boundSet, high1, high2, lowInf, highInf);
 
-		return new IntervalValue(lowInf.get() ? null : boundSet.first(), highInf.get() ? null : boundSet.last());
+		return new Intv(lowInf.get() ? null : boundSet.first(), highInf.get() ? null : boundSet.last());
 	}
 
 	private void multiplyBounds(SortedSet<Integer> boundSet, Integer low1, Integer low2, AtomicBoolean lowInf,
@@ -329,14 +329,14 @@ public class IntervalValue {
 					return true;
 	}
 
-	public Boolean isEqualTo(IntervalValue other) {
+	public Boolean isEqualTo(Intv other) {
 		if (!equals(other) && (other.inRelationWith(this) || inRelationWith(other)))
 			// one contains the other
 			return null;
 		return equals(other);
 	}
 
-	public Boolean isLessThen(IntervalValue other) {
+	public Boolean isLessThen(Intv other) {
 		if (equals(other))
 			return true;
 		if (other.isFinite() && isFinite()) {
@@ -354,52 +354,51 @@ public class IntervalValue {
 	}
 
 
-	public IntervalValue minusOne() {
-		return new IntervalValue(-1, -1);
+	public Intv minusOne() {
+		return new Intv(-1, -1);
 	}
 
-	public IntervalValue mk(int value) {
-		return new IntervalValue(value, value);
+	public Intv mk(int value) {
+		return new Intv(value, value);
 	}
 
-	public IntervalValue makeGreaterThan(IntervalValue other) {
+	public Intv makeGreaterThan(Intv other) {
 		if (!other.isFinite())
 			return this;
 		if (!lowIsMinusInfinity() && low > other.high)
 			return this;
 		if (highIsPlusInfinity() || high >= other.high + 1)
-			return new IntervalValue(other.high + 1, high);
+			return new Intv(other.high + 1, high);
 		return mk(other.high + 1);
 	}
 
-	public IntervalValue makeGreaterOrEqualThan(IntervalValue other) {
+	public Intv makeGreaterOrEqualThan(Intv other) {
 		if (!other.isFinite())
 			return this;
 		if (!lowIsMinusInfinity() && low >= other.high)
 			return this;
 		if (highIsPlusInfinity() || high >= other.high)
-			return new IntervalValue(other.high, high);
+			return new Intv(other.high, high);
 		return mk(other.high);
 	}
 
-	public IntervalValue makeLessThan(IntervalValue other) {
+	public Intv makeLessThan(Intv other) {
 		if (!other.isFinite())
 			return this;
 		if (!highIsPlusInfinity() && high < other.low)
 			return this;
 		if (lowIsMinusInfinity() || low <= other.low - 1)
-			return new IntervalValue(low, other.low - 1);
+			return new Intv(low, other.low - 1);
 		return mk(other.low - 1);
 	}
 
-
-	public IntervalValue makeLessOrEqualThan(IntervalValue other) {
+	public Intv makeLessOrEqualThan(Intv other) {
 		if (!other.isFinite())
 			return this;
 		if (!highIsPlusInfinity() && high <= other.low)
 			return this;
 		if (lowIsMinusInfinity() || low <= other.low)
-			return new IntervalValue(low, other.low);
+			return new Intv(low, other.low);
 		return mk(other.low);
 	}
 }
