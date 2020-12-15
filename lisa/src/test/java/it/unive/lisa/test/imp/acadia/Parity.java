@@ -104,18 +104,16 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
 	@Override
 	protected Parity evalUnaryExpression(UnaryOperator operator, Parity arg) {
-
 		switch (operator) {
 		case NUMERIC_NEG:
 			return arg;
 		case STRING_LENGTH: 
 			return top();
-		case LOGICAL_NOT:
 		default:
 			break;
 		}		
 
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -124,21 +122,6 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 			return bottom();
 
 		switch (operator) {
-		case COMPARISON_EQ:
-		case COMPARISON_GE:
-		case COMPARISON_GT:
-		case COMPARISON_LE:
-		case COMPARISON_LT:
-		case COMPARISON_NE:
-		case LOGICAL_AND:
-		case LOGICAL_OR:
-		case STRING_CONCAT:
-		case STRING_CONTAINS:
-		case STRING_ENDS_WITH:
-		case STRING_EQUALS:
-		case STRING_INDEX_OF:
-		case STRING_STARTS_WITH:
-			break;
 		case NUMERIC_ADD:
 		case NUMERIC_SUB:
 			if (right.equals(left))
@@ -165,12 +148,12 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 			break;
 		}
 
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected Parity evalTernaryExpression(TernaryOperator operator, Parity left, Parity middle, Parity right) {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -190,27 +173,27 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
 	@Override
 	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNullConstant() {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTypeConversion(Type type, Parity right) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, Parity arg) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
@@ -220,7 +203,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
 	@Override
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Parity left, Parity middle, Parity right) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override

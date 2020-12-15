@@ -62,12 +62,12 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 		if (constant.getValue() instanceof Integer) 
 			return new Interval(new Intv((Integer) constant.getValue(), (Integer) constant.getValue()));
 
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected Interval evalTypeConversion(Type type, Interval arg) {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -78,7 +78,6 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 			return new Interval(new Intv(0, null).mul(new Intv(-1, -1)));
 		case STRING_LENGTH: 
 			return new Interval(new Intv(0, null));
-		case LOGICAL_NOT:
 		default:
 			break;
 		}		
@@ -110,7 +109,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 		case NUMERIC_ADD: return new Interval(left.getInterval().plus(right.getInterval()));
 		case NUMERIC_SUB: return new Interval(left.getInterval().diff(right.getInterval()));
 		case NUMERIC_MUL: return new Interval(left.getInterval().mul(right.getInterval()));
-		case NUMERIC_DIV: break;
+		case NUMERIC_DIV:  return new Interval(left.getInterval().div(right.getInterval()));
 		case NUMERIC_MOD:
 			return top();
 		default:
@@ -127,17 +126,17 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 	@Override
 	protected Interval lubAux(Interval other) throws SemanticException {
-		return new Interval(getInterval().lubAux(other.getInterval()));
+		return new Interval(getInterval().lub(other.getInterval()));
 	}
 
 	@Override
 	protected Interval wideningAux(Interval other) throws SemanticException {
-		return new Interval(getInterval().wideningAux(other.getInterval()));
+		return new Interval(getInterval().widening(other.getInterval()));
 	}
 
 	@Override
 	protected boolean lessOrEqualAux(Interval other) throws SemanticException {
-		return getInterval().isLessThen(other.getInterval());
+		return getInterval().lessOrEqual(other.getInterval());
 	}
 
 	@Override

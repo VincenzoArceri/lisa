@@ -80,7 +80,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			return i == 0 ? zero() : i > 0 ? pos() : neg();
 		}
 		
-		return bottom();
+		return top();
 	}
 	
 	private Sign pos() {
@@ -115,7 +115,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 	
 	@Override
 	protected Sign evalTypeConversion(Type type, Sign arg) {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -132,32 +132,16 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return top();
 		case STRING_LENGTH: 
 			return top();
-		case LOGICAL_NOT:
 		default:
 			break;
 		}		
 		
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected Sign evalBinaryExpression(BinaryOperator operator, Sign left, Sign right) {
 		switch (operator) {
-		case COMPARISON_EQ:
-		case COMPARISON_GE:
-		case COMPARISON_GT:
-		case COMPARISON_LE:
-		case COMPARISON_LT:
-		case COMPARISON_NE:
-		case LOGICAL_AND:
-		case LOGICAL_OR:
-		case STRING_CONCAT:
-		case STRING_CONTAINS:
-		case STRING_ENDS_WITH:
-		case STRING_EQUALS:
-		case STRING_INDEX_OF:
-		case STRING_STARTS_WITH:
-			break;
 		case NUMERIC_ADD:
 			if (left.isZero())
 				return right;
@@ -172,8 +156,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return bottom();
 			else if (left.isZero())
 				return zero();
-			else if (left.isTop() || right.isTop())
-				return top();
 			else if (left.equals(right))
 				return pos();
 			else
@@ -183,8 +165,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		case NUMERIC_MUL:
 			if (left.isZero() || right.isZero())
 				return zero();
-			else if (left.isTop() || right.isTop())
-				return top();
 			else if (left.equals(right))
 				return pos();
 			else
@@ -197,12 +177,12 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			else if (left.equals(right))
 				return top();
 			else
-				return left;
+				return left; 
 		default:
 			break;
 		}
 		
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -249,27 +229,27 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 
 	@Override
 	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNullConstant() {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTypeConversion(Type type, Sign right) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, Sign arg) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
@@ -290,18 +270,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			return left.gt(right).negate().and(left.eq(right).negate());
 		case COMPARISON_NE:
 			return left.eq(right).negate();
-		case STRING_CONTAINS:
-		case STRING_ENDS_WITH:
-		case STRING_EQUALS:
-		case STRING_INDEX_OF:
-		case STRING_STARTS_WITH:
-		case NUMERIC_ADD:
-		case NUMERIC_DIV:
-		case NUMERIC_MOD:
-		case NUMERIC_MUL:
-		case NUMERIC_SUB:
-		case STRING_CONCAT:
-			return Satisfiability.BOTTOM;
 		default:
 			break;
 		}
@@ -331,6 +299,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 	
 	@Override
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Sign left, Sign middle, Sign right) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 }

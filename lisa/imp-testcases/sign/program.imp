@@ -5,8 +5,20 @@ class typing {
 		max = 10;
 		while (i < max) 
 			i = i + 2;
-
 		return i;
+	}
+	
+	dec(c,d) {
+		i = 1000;
+		while (i > 0) 
+			i = i - 1;
+			
+		return i;
+	}
+	
+	div() {
+		i = 5 / 3;
+		y = x / 0;	
 	}
 
 	ub_example() {

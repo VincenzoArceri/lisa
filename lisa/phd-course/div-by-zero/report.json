@@ -1,0 +1,8 @@
+{
+  "warnings" : [ {
+    "message" : "['imp-testcases/sign/program.imp':20:10] on 'untyped div()': [EXPRESSION] [possible] Maybe division by zero!"
+  }, {
+    "message" : "['imp-testcases/sign/program.imp':21:10] on 'untyped div()': [EXPRESSION] [definite] Found division by zero!"
+  } ],
+  "files" : [ "untyped_dec(untyped_c,_untyped_d).dot", "untyped_div().dot", "untyped_sign_parity_example().dot", "untyped_ub_example().dot" ]
+}
