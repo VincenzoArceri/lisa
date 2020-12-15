@@ -26,5 +26,4 @@ public class ParityXSign extends ValueCartesianProduct<ValueEnvironment<Parity>,
 			result += x + ": (" + left.getState(x) + ", " + right.getState(x) + ")";
 		return result;
 	}
-
 }

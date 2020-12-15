@@ -61,61 +61,40 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected ConstantPropagation evalNullConstant() {
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected ConstantPropagation evalNonNullConstant(Constant constant) {
 		if (constant.getValue() instanceof Integer)
 			return new ConstantPropagation((Integer) constant.getValue());
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected ConstantPropagation evalTypeConversion(Type type, ConstantPropagation arg) {
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected ConstantPropagation evalUnaryExpression(UnaryOperator operator, ConstantPropagation arg) {
-
 		switch (operator) {
-		case LOGICAL_NOT:
-			break;
 		case NUMERIC_NEG:
-				return new ConstantPropagation(0 - value);
+			return new ConstantPropagation(0 - value);
 		case STRING_LENGTH:
-			break;
+			return top();
 		default:
-			return bottom();
+			return top();
 		}
-
-		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation evalBinaryExpression(BinaryOperator operator, ConstantPropagation left, ConstantPropagation right) {
 		switch(operator) {
-		case COMPARISON_EQ:
-			break;
-		case COMPARISON_GE:
-			break;
-		case COMPARISON_GT:
-			break;
-		case COMPARISON_LE:
-			break;
-		case COMPARISON_LT:
-			break;
-		case COMPARISON_NE:
-			break;
-		case LOGICAL_AND:
-			break;
-		case LOGICAL_OR:
-			break;
 		case NUMERIC_ADD:
-				return new ConstantPropagation(left.value + right.value);
+			return new ConstantPropagation(left.value + right.value);
 		case NUMERIC_DIV:
-			if (left.value % right.value == 0)
+			if (left.value % right.value != 0)
 				return top();
 			else
 				return new ConstantPropagation(left.value / right.value);
@@ -125,34 +104,19 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 			return new ConstantPropagation(left.value * right.value);
 		case NUMERIC_SUB:
 			return new ConstantPropagation(left.value - right.value);
-	case STRING_CONCAT:
-			break;
-		case STRING_CONTAINS:
-			break;
-		case STRING_ENDS_WITH:
-			break;
-		case STRING_EQUALS:
-			break;
-		case STRING_INDEX_OF:
-			break;
-		case STRING_STARTS_WITH:
-			break;
 		default:
-			break;
+			return top();
 		}
-		return bottom();
 	}
 
 	@Override
 	protected ConstantPropagation evalTernaryExpression(TernaryOperator operator, ConstantPropagation left, ConstantPropagation middle, ConstantPropagation right) {
-		return bottom();
+		return top();
 	}
 
 	@Override
 	protected ConstantPropagation lubAux(ConstantPropagation other) throws SemanticException {
-		if (equals(other))
-			return other;
-		return top();
+		return equals(other) ? other : top();
 	}
 
 	@Override
@@ -198,34 +162,33 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNullConstant() {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTypeConversion(Type type, ConstantPropagation right) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, ConstantPropagation arg) {
-		return Satisfiability.BOTTOM;
+		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, ConstantPropagation left,
 			ConstantPropagation right) {
-		
+
 		switch(operator) {
 		case COMPARISON_EQ:
 			return left.value == right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
@@ -239,24 +202,9 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 			return left.value < right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
 		case COMPARISON_NE:
 			return left.value != right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
-		case LOGICAL_AND:
-		case LOGICAL_OR:
-		case NUMERIC_ADD:
-		case NUMERIC_DIV:
-		case NUMERIC_MOD:
-		case NUMERIC_MUL:
-		case NUMERIC_SUB:
-		case STRING_CONCAT:
-		case STRING_CONTAINS:
-		case STRING_ENDS_WITH:
-		case STRING_EQUALS:
-		case STRING_INDEX_OF:
-		case STRING_STARTS_WITH:
 		default:
-			break;
+			return Satisfiability.UNKNOWN;
 		}
-		
-		return Satisfiability.BOTTOM;
 	}
 
 	@Override

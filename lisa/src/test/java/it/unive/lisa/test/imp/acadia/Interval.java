@@ -54,7 +54,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 	@Override
 	protected Interval evalNullConstant() {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -79,10 +79,8 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 		case STRING_LENGTH: 
 			return new Interval(new Intv(0, null));
 		default:
-			break;
+			return top();
 		}		
-
-		return bottom();
 	}
 
 	@Override
@@ -91,37 +89,24 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 			return bottom();
 
 		switch (operator) {
-		case COMPARISON_EQ:
-		case COMPARISON_GE:
-		case COMPARISON_GT:
-		case COMPARISON_LE:
-		case COMPARISON_LT:
-		case COMPARISON_NE:
-		case LOGICAL_AND:
-		case LOGICAL_OR:
-		case STRING_CONCAT:
-		case STRING_CONTAINS:
-		case STRING_ENDS_WITH:
-		case STRING_EQUALS:
-		case STRING_INDEX_OF:
-		case STRING_STARTS_WITH:
-			break;
-		case NUMERIC_ADD: return new Interval(left.getInterval().plus(right.getInterval()));
-		case NUMERIC_SUB: return new Interval(left.getInterval().diff(right.getInterval()));
-		case NUMERIC_MUL: return new Interval(left.getInterval().mul(right.getInterval()));
-		case NUMERIC_DIV:  return new Interval(left.getInterval().div(right.getInterval()));
-		case NUMERIC_MOD:
+		case NUMERIC_ADD: 
+			return new Interval(left.getInterval().plus(right.getInterval()));
+		case NUMERIC_SUB: 
+			return new Interval(left.getInterval().diff(right.getInterval()));
+		case NUMERIC_MUL: 
+			return new Interval(left.getInterval().mul(right.getInterval()));
+		case NUMERIC_DIV: 
+			return new Interval(left.getInterval().div(right.getInterval()));
+		case NUMERIC_MOD: 
 			return top();
-		default:
-			break;
+		default: 
+			return top();
 		}
-
-		return bottom();
 	}
 
 	@Override
 	protected Interval evalTernaryExpression(TernaryOperator operator, Interval left, Interval middle, Interval right) {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -141,44 +126,37 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 	@Override
 	protected Satisfiability satisfiesIdentifier(Identifier identifier) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNullConstant() {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesNonNullConstant(Constant constant) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTypeConversion(Type type, Interval right) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesUnaryExpression(UnaryOperator operator, Interval arg) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, Interval left, Interval right) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 
 	@Override
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Interval left, Interval middle,
 			Interval right) {
-		// TODO Auto-generated method stub
 		return Satisfiability.UNKNOWN;
 	}
 

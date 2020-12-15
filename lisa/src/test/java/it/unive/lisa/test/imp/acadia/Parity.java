@@ -55,11 +55,8 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 		case BOT: return "BOT";
 		case ODD: return "Odd";
 		case EVEN: return "Even";
-		case TOP: return "TOP";
-		default: break;
+		default: return "TOP";
 		}
-
-		return "Parity error";
 	}
 
 	public Values getParity() {
@@ -68,7 +65,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
 	@Override
 	protected Parity evalNullConstant() {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -78,7 +75,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 			return i % 2 == 0 ? even() : odd();
 		}
 
-		return bottom();
+		return top();
 	}
 
 	private Parity odd() {
@@ -99,7 +96,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
 	@Override
 	protected Parity evalTypeConversion(Type type, Parity arg) {
-		return bottom();
+		return top();
 	}
 
 	@Override
@@ -110,16 +107,12 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 		case STRING_LENGTH: 
 			return top();
 		default:
-			break;
+			return top();
 		}		
-
-		return top();
 	}
 
 	@Override
 	protected Parity evalBinaryExpression(BinaryOperator operator, Parity left, Parity right) {
-		if (left.isBottom() || right.isBottom())
-			return bottom();
 
 		switch (operator) {
 		case NUMERIC_ADD:
@@ -145,10 +138,8 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 		case NUMERIC_MOD:
 			return top();
 		default:
-			break;
+			return top();
 		}
-
-		return top();
 	}
 
 	@Override

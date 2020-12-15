@@ -56,12 +56,9 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		case BOT: return "Bottom";
 		case NEG: return "-";
 		case POS: return "+";
-		case TOP: return "Unknown sign";
 		case ZERO: return "0";
-		default: break;
+		default: return "Unknown sign";
 		}
-		
-		return "Sign error";
 	}
 	
 	public Values getSign() {
@@ -133,10 +130,8 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		case STRING_LENGTH: 
 			return top();
 		default:
-			break;
-		}		
-		
-		return top();
+			return top();
+		}				
 	}
 
 	@Override
@@ -179,10 +174,8 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			else
 				return left; 
 		default:
-			break;
+			return top();
 		}
-		
-		return top();
 	}
 
 	@Override
@@ -271,10 +264,8 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		case COMPARISON_NE:
 			return left.eq(right).negate();
 		default:
-			break;
+			return Satisfiability.UNKNOWN;
 		}
-		
-		return Satisfiability.UNKNOWN;
 	}
 
 	private Satisfiability eq(Sign other) {
