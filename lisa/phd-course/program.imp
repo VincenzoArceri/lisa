@@ -1,5 +1,4 @@
 class typing {
-
 	sign_parity_example() {
 		i = 2;
 		max = 10;
