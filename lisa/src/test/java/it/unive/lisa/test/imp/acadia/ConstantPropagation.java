@@ -20,13 +20,17 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	private final Integer value;
 
+	public ConstantPropagation() {
+		this(null, true, false);
+	}
+	
 	private ConstantPropagation(Integer value, boolean isTop, boolean isBottom) {
 		this.value = value;
 		this.isTop = isTop;
 		this.isBottom = isBottom;
 	}
 
-	public ConstantPropagation(Integer value) {
+	private ConstantPropagation(Integer value) {
 		this(value, false, false);
 	}
 
@@ -189,6 +193,9 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, ConstantPropagation left,
 			ConstantPropagation right) {
 
+		if (left.isTop() || right.isTop())
+			return Satisfiability.UNKNOWN;
+ 
 		switch(operator) {
 		case COMPARISON_EQ:
 			return left.value == right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;

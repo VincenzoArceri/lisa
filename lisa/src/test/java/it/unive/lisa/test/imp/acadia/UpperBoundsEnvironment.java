@@ -49,7 +49,6 @@ implements ValueDomain<UpperBoundsEnvironment> {
 
 	@Override
 	public UpperBoundsEnvironment assign(Identifier id, ValueExpression expression) throws SemanticException {
-
 		if (expression instanceof Identifier) {
 			Identifier rhs = (Identifier) expression;
 			UpperBounds yUB = new UpperBounds(getState(rhs).getIdentifiers());
@@ -101,6 +100,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 						}
 					}
 				} 
+				break;
 			case NUMERIC_SUB:
 				if (binary.getLeft() instanceof Identifier && !binary.getLeft().equals(id) && binary.getRight() instanceof Constant) {
 					Identifier y = (Identifier) binary.getLeft();
@@ -134,7 +134,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 						}
 					}
 				} 
-
+				break;
 			default:
 				break;
 			}
@@ -177,8 +177,9 @@ implements ValueDomain<UpperBoundsEnvironment> {
 
 					func.put(x, xUB);
 					func.put(x, yUB);
-					return new UpperBoundsEnvironment(new UpperBounds(new HashSet<>()), func).closure();	
+					return new UpperBoundsEnvironment(lattice, func).closure();	
 				}
+				break;
 			case COMPARISON_GE:
 				break;
 			case COMPARISON_GT:
@@ -203,36 +204,8 @@ implements ValueDomain<UpperBoundsEnvironment> {
 					xUB.addIdentifier(y);
 
 					func.put(x, xUB);
-					return new UpperBoundsEnvironment(new UpperBounds(new HashSet<>()), func).closure();	
+					return new UpperBoundsEnvironment(lattice, func);//.closure();	
 				}
-			case COMPARISON_NE:
-				break;
-			case LOGICAL_AND:
-				break;
-			case LOGICAL_OR:
-				break;
-			case NUMERIC_ADD:
-				break;
-			case NUMERIC_DIV:
-				break;
-			case NUMERIC_MOD:
-				break;
-			case NUMERIC_MUL:
-				break;
-			case NUMERIC_SUB:
-				break;
-			case STRING_CONCAT:
-				break;
-			case STRING_CONTAINS:
-				break;
-			case STRING_ENDS_WITH:
-				break;
-			case STRING_EQUALS:
-				break;
-			case STRING_INDEX_OF:
-				break;
-			case STRING_STARTS_WITH:
-				break;
 			default:
 				break;
 			}		
@@ -243,13 +216,17 @@ implements ValueDomain<UpperBoundsEnvironment> {
 
 	@Override
 	public UpperBoundsEnvironment forgetIdentifier(Identifier id) throws SemanticException {
-		if (function == null)
-			return new UpperBoundsEnvironment(lattice, function);
+		if (isTop())
+			return top();
+		if (isBottom())
+			return bottom();
 
 		UpperBoundsEnvironment result = new UpperBoundsEnvironment(lattice, new HashMap<>(function));
 		if (result.function.containsKey(id))
 			result.function.remove(id);
 
+		if (result.function.isEmpty())
+			return top();
 		return result;
 	}
 
@@ -302,5 +279,10 @@ implements ValueDomain<UpperBoundsEnvironment> {
 			builder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
 
 		return builder.toString().trim();	
+	}
+	
+	@Override
+	public String toString() {
+		return representation();
 	}
 }

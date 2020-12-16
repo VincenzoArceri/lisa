@@ -54,9 +54,9 @@ public abstract class BaseNonRelationalValueDomain<T extends BaseNonRelationalVa
 		if (expression instanceof UnaryExpression) {
 			UnaryExpression unary = (UnaryExpression) expression;
 
-			if (unary.getOperator() == UnaryOperator.LOGICAL_NOT)
+			if (unary.getOperator() == UnaryOperator.LOGICAL_NOT) 
 				return satisfies(unary.getExpression(), environment).negate();
-			else {
+			 else {
 				T arg = eval((ValueExpression) unary.getExpression(), environment);
 				if (arg.isBottom())
 					return Satisfiability.BOTTOM;
@@ -74,6 +74,7 @@ public abstract class BaseNonRelationalValueDomain<T extends BaseNonRelationalVa
 			else {
 				T left = eval((ValueExpression) binary.getLeft(), environment);
 				T right = eval((ValueExpression) binary.getRight(), environment);
+				
 				if (left.isBottom() || right.isBottom())
 					return Satisfiability.BOTTOM;
 				return satisfiesBinaryExpression(binary.getOperator(), left, right);

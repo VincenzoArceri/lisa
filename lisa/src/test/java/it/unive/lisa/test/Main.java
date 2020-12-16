@@ -7,11 +7,17 @@ import java.util.Collection;
 
 import it.unive.lisa.AnalysisException;
 import it.unive.lisa.LiSA;
+import it.unive.lisa.analysis.heap.ClassBasedHeap;
 import it.unive.lisa.cfg.CFG;
 import it.unive.lisa.test.imp.IMPFrontend;
 import it.unive.lisa.test.imp.ParsingException;
+import it.unive.lisa.test.imp.acadia.ConstantPropagation;
 import it.unive.lisa.test.imp.acadia.DivisionByZeroCheck;
-import it.unive.lisa.test.imp.acadia.ParityXSign;
+import it.unive.lisa.test.imp.acadia.Interval;
+import it.unive.lisa.test.imp.acadia.Parity;
+import it.unive.lisa.test.imp.acadia.Pentagon;
+import it.unive.lisa.test.imp.acadia.Sign;
+import it.unive.lisa.test.imp.acadia.UpperBoundsEnvironment;
 
 public class Main {
 	
@@ -21,18 +27,17 @@ public class Main {
 		
 		for (CFG cfg : cfgs)
 			lisa.addCFG(cfg);
-		
-		lisa.addSyntacticCheck(new DivisionByZeroCheck());
-		lisa.addValueDomain(new ParityXSign());
+	
+		lisa.addValueDomain(new UpperBoundsEnvironment());
+		lisa.setInferTypes(false);
 		lisa.setDumpAnalysis(true);
 		lisa.setWorkdir("phd-course-reports/div-by-zero");
-		lisa.setDumpCFGs(true);
 		lisa.setJsonOutput(true);
 
 		try {
 			lisa.run();
 		} catch (AnalysisException e) {
-			System.err.println(e);
+			e.printStackTrace();
 			fail("Something bad happened during the analysis :(");
 		}
 	}
