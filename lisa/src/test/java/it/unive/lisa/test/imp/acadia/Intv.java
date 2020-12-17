@@ -35,14 +35,8 @@ public class Intv {
 		}
 	};
 
-	/**
-	 * Low value. Null means -Infinity
-	 */
 	private final Integer low;
 
-	/**
-	 * High value. Null means +infinity
-	 */
 	private final Integer high;
 
 	private Intv() {
@@ -50,40 +44,19 @@ public class Intv {
 		high = null;
 	}
 
-	/**
-	 * Builds a new interval. For both parameters, a null value means infinity.
-	 * 
-	 * @param low  the lower bound
-	 * @param high the upper bound
-	 */
 	public Intv(Integer low, Integer high) {
 		this.low = low;
 		this.high = high;
 	}
 
-	/**
-	 * Returns the lower bound.
-	 * 
-	 * @return the lower bound
-	 */
 	public Integer getLow() {
 		return low;
 	}
 
-	/**
-	 * Yields true if and only if the lower bound of this interval is -infinity.
-	 * 
-	 * @return true only if that condition holds
-	 */
 	public boolean lowIsMinusInfinity() {
 		return low == null;
 	}
 
-	/**
-	 * Returns the higher bound.
-	 * 
-	 * @return the higher bound
-	 */
 	public Integer getHigh() {
 		return high;
 	}
@@ -130,11 +103,6 @@ public class Intv {
 		return getTop();
 	}
 
-	/**
-	 * Yields the unique top element.
-	 * 
-	 * @return the top element
-	 */
 	public static Intv getTop() {
 		return TOP;
 	}
@@ -217,7 +185,7 @@ public class Intv {
 
 		if (other.highIsPlusInfinity() || lowIsMinusInfinity())
 			newLow = null;
-		else 
+		else
 			newLow = low - other.high;
 
 		if (other.lowIsMinusInfinity() || highIsPlusInfinity())
@@ -282,7 +250,8 @@ public class Intv {
 		return new Intv(lowInf.get() ? null : boundSet.first(), highInf.get() ? null : boundSet.last());
 	}
 
-	private void multiplyBounds(SortedSet<Integer> boundSet, Integer i, Integer j, AtomicBoolean lowInf, AtomicBoolean highInf) {
+	private void multiplyBounds(SortedSet<Integer> boundSet, Integer i, Integer j, AtomicBoolean lowInf,
+			AtomicBoolean highInf) {
 		if (i == null) {
 			if (j == null)
 				// -inf * -inf = +inf
@@ -310,7 +279,8 @@ public class Intv {
 			boundSet.add(i * j);
 	}
 
-	private void divideBounds(SortedSet<Integer> boundSet, Integer i, Integer j, AtomicBoolean lowInf, AtomicBoolean highInf) {
+	private void divideBounds(SortedSet<Integer> boundSet, Integer i, Integer j, AtomicBoolean lowInf,
+			AtomicBoolean highInf) {
 		if (i == null) {
 			if (j == null)
 				// -inf * -inf = +inf
@@ -334,11 +304,10 @@ public class Intv {
 				highInf.set(true);
 			else
 				boundSet.add(0);
-		} else
-			if (j != 0) {
-				boundSet.add((int) Math.ceil(i / (double) j));
-				boundSet.add((int) Math.floor(i / (double) j));
-			}
+		} else if (j != 0) {
+			boundSet.add((int) Math.ceil(i / (double) j));
+			boundSet.add((int) Math.floor(i / (double) j));
+		}
 		// division by zero!
 	}
 
@@ -351,14 +320,14 @@ public class Intv {
 	// l1 >= l2
 	private boolean lessOrEqualLow(Integer l1, Integer l2) {
 		if (l1 == null) {
-			if (l2 == null) 
+			if (l2 == null)
 				return true;
-			else 
+			else
 				return false;
 		} else {
 			if (l2 == null)
 				return true;
-			else 
+			else
 				return l1 >= l2;
 		}
 	}
@@ -366,14 +335,14 @@ public class Intv {
 	// h1 <= h2
 	private boolean lessOrEqualHigh(Integer h1, Integer h2) {
 		if (h1 == null) {
-			if (h2 == null) 
+			if (h2 == null)
 				return true;
-			else 
+			else
 				return false;
 		} else {
 			if (h2 == null)
 				return false;
-			else 
+			else
 				return h1 <= h2;
 		}
 	}

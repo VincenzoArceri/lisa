@@ -12,7 +12,6 @@ import it.unive.lisa.symbolic.value.UnaryOperator;
 
 public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
-
 	private final Intv val;
 
 	private Interval(Intv val) {
@@ -59,7 +58,7 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 
 	@Override
 	protected Interval evalNonNullConstant(Constant constant) {
-		if (constant.getValue() instanceof Integer) 
+		if (constant.getValue() instanceof Integer)
 			return new Interval(new Intv((Integer) constant.getValue(), (Integer) constant.getValue()));
 
 		return top();
@@ -76,11 +75,11 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 		switch (operator) {
 		case NUMERIC_NEG:
 			return new Interval(new Intv(0, null).mul(new Intv(-1, -1)));
-		case STRING_LENGTH: 
+		case STRING_LENGTH:
 			return new Interval(new Intv(0, null));
 		default:
 			return top();
-		}		
+		}
 	}
 
 	@Override
@@ -89,17 +88,17 @@ public class Interval extends BaseNonRelationalValueDomain<Interval> {
 			return bottom();
 
 		switch (operator) {
-		case NUMERIC_ADD: 
+		case NUMERIC_ADD:
 			return new Interval(left.getInterval().plus(right.getInterval()));
-		case NUMERIC_SUB: 
+		case NUMERIC_SUB:
 			return new Interval(left.getInterval().diff(right.getInterval()));
-		case NUMERIC_MUL: 
+		case NUMERIC_MUL:
 			return new Interval(left.getInterval().mul(right.getInterval()));
-		case NUMERIC_DIV: 
+		case NUMERIC_DIV:
 			return new Interval(left.getInterval().div(right.getInterval()));
-		case NUMERIC_MOD: 
+		case NUMERIC_MOD:
 			return top();
-		default: 
+		default:
 			return top();
 		}
 	}
