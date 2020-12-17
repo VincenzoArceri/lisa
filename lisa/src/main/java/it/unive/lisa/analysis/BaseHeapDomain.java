@@ -52,7 +52,7 @@ public abstract class BaseHeapDomain<H extends BaseHeapDomain<H>> extends BaseLa
 
 		if (expression instanceof ValueExpression)
 			return mk((H) this, (ValueExpression) expression);
-				
+
 		return top();
 	}
 

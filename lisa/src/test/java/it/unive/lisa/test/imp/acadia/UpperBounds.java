@@ -1,13 +1,12 @@
 package it.unive.lisa.test.imp.acadia;
 
+import it.unive.lisa.analysis.InverseSetLattice;
+import it.unive.lisa.symbolic.value.Identifier;
 import java.util.HashSet;
 import java.util.Set;
 
-import it.unive.lisa.analysis.InverseSetLattice;
-import it.unive.lisa.symbolic.value.Identifier;
-
 public class UpperBounds extends InverseSetLattice<UpperBounds, Identifier> {
-	
+
 	protected UpperBounds(Set<Identifier> elements) {
 		super(elements);
 	}
@@ -26,12 +25,12 @@ public class UpperBounds extends InverseSetLattice<UpperBounds, Identifier> {
 	public boolean isTop() {
 		return elements.isEmpty();
 	}
-	
+
 	@Override
 	public boolean isBottom() {
 		return elements == null;
 	}
-	
+
 	@Override
 	protected UpperBounds mk(Set<Identifier> set) {
 		Set<Identifier> res = new HashSet<>(set);
@@ -41,15 +40,15 @@ public class UpperBounds extends InverseSetLattice<UpperBounds, Identifier> {
 	public void addIdentifier(Identifier id) {
 		elements.add(id);
 	}
-	
+
 	public void addIdentifiers(UpperBounds ids) {
 		elements.addAll(ids.elements);
 	}
-	
+
 	public boolean containsIdentifier(Identifier id) {
 		return isTop() || isBottom() ? false : elements.contains(id);
 	}
-	
+
 	public Set<Identifier> getIdentifiers() {
 		return elements;
 	}

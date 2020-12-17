@@ -1,10 +1,5 @@
 package it.unive.lisa.test.imp.acadia;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import it.unive.lisa.analysis.FunctionalLattice;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.ValueDomain;
@@ -12,9 +7,13 @@ import it.unive.lisa.symbolic.value.BinaryExpression;
 import it.unive.lisa.symbolic.value.Constant;
 import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.ValueExpression;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class UpperBoundsEnvironment extends FunctionalLattice<UpperBoundsEnvironment, Identifier, UpperBounds>
-implements ValueDomain<UpperBoundsEnvironment> {
+		implements ValueDomain<UpperBoundsEnvironment> {
 
 	public UpperBoundsEnvironment() {
 		this(new UpperBounds(new HashSet<>()));
@@ -37,6 +36,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 	public boolean isBottom() {
 		return function == null && lattice.isBottom();
 	}
+
 	@Override
 	public UpperBoundsEnvironment top() {
 		return new UpperBoundsEnvironment(lattice.top(), null);
@@ -66,9 +66,10 @@ implements ValueDomain<UpperBoundsEnvironment> {
 		if (expression instanceof BinaryExpression) {
 			BinaryExpression binary = (BinaryExpression) expression;
 
-			switch(binary.getOperator()) {
+			switch (binary.getOperator()) {
 			case NUMERIC_ADD:
-				if (binary.getLeft() instanceof Identifier && !binary.getLeft().equals(id) && binary.getRight() instanceof Constant) {
+				if (binary.getLeft() instanceof Identifier && !binary.getLeft().equals(id)
+						&& binary.getRight() instanceof Constant) {
 					Identifier y = (Identifier) binary.getLeft();
 					Constant cons = (Constant) binary.getRight();
 
@@ -99,10 +100,11 @@ implements ValueDomain<UpperBoundsEnvironment> {
 							return res.closure();
 						}
 					}
-				} 
+				}
 				break;
 			case NUMERIC_SUB:
-				if (binary.getLeft() instanceof Identifier && !binary.getLeft().equals(id) && binary.getRight() instanceof Constant) {
+				if (binary.getLeft() instanceof Identifier && !binary.getLeft().equals(id)
+						&& binary.getRight() instanceof Constant) {
 					Identifier y = (Identifier) binary.getLeft();
 					Constant cons = (Constant) binary.getRight();
 
@@ -133,7 +135,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 							return res.closure();
 						}
 					}
-				} 
+				}
 				break;
 			default:
 				break;
@@ -157,7 +159,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 		if (expression instanceof BinaryExpression) {
 			BinaryExpression binary = (BinaryExpression) expression;
 
-			switch(binary.getOperator()) {
+			switch (binary.getOperator()) {
 			case COMPARISON_EQ:
 				if (binary.getLeft() instanceof Identifier && binary.getRight() instanceof Identifier) {
 					Identifier x = (Identifier) binary.getLeft();
@@ -167,7 +169,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 					UpperBounds yUB = new UpperBounds(getState(y).getIdentifiers());
 
 					Map<Identifier, UpperBounds> func;
-					if (function == null) 
+					if (function == null)
 						func = new HashMap<>();
 					else
 						func = new HashMap<>(function);
@@ -177,7 +179,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 
 					func.put(x, xUB);
 					func.put(x, yUB);
-					return new UpperBoundsEnvironment(lattice, func).closure();	
+					return new UpperBoundsEnvironment(lattice, func).closure();
 				}
 				break;
 			case COMPARISON_GE:
@@ -195,7 +197,7 @@ implements ValueDomain<UpperBoundsEnvironment> {
 					UpperBounds yUB = new UpperBounds(getState(y).getIdentifiers());
 
 					Map<Identifier, UpperBounds> func;
-					if (function == null) 
+					if (function == null)
 						func = new HashMap<>();
 					else
 						func = new HashMap<>(function);
@@ -204,11 +206,11 @@ implements ValueDomain<UpperBoundsEnvironment> {
 					xUB.addIdentifier(y);
 
 					func.put(x, xUB);
-					return new UpperBoundsEnvironment(lattice, func);//.closure();	
+					return new UpperBoundsEnvironment(lattice, func);// .closure();
 				}
 			default:
 				break;
-			}		
+			}
 		}
 
 		return new UpperBoundsEnvironment(lattice, function);
@@ -251,11 +253,10 @@ implements ValueDomain<UpperBoundsEnvironment> {
 		do {
 			previous = closure;
 			closure = previous.closureAux();
-		} while(!previous.equals(closure));
+		} while (!previous.equals(closure));
 
 		return previous;
 	}
-
 
 	private void addRelation(Identifier x, Identifier y) {
 		getState(x).addIdentifier(y);
@@ -278,9 +279,9 @@ implements ValueDomain<UpperBoundsEnvironment> {
 		for (Entry<Identifier, UpperBounds> entry : function.entrySet())
 			builder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
 
-		return builder.toString().trim();	
+		return builder.toString().trim();
 	}
-	
+
 	@Override
 	public String toString() {
 		return representation();

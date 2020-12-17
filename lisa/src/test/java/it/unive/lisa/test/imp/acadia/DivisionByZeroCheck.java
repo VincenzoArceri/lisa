@@ -15,10 +15,12 @@ import it.unive.lisa.test.imp.expressions.IMPIntLiteral;
 public class DivisionByZeroCheck implements SyntacticCheck {
 
 	@Override
-	public void beforeExecution(CheckTool tool) {	}
+	public void beforeExecution(CheckTool tool) {
+	}
 
 	@Override
-	public void visitCFGDescriptor(CheckTool tool, CFGDescriptor descriptor) { }
+	public void visitCFGDescriptor(CheckTool tool, CFGDescriptor descriptor) {
+	}
 
 	@Override
 	public void visitStatement(CheckTool tool, Statement statement) {
@@ -26,26 +28,26 @@ public class DivisionByZeroCheck implements SyntacticCheck {
 			Assignment asg = (Assignment) statement;
 			visitExpression(tool, asg.getRight());
 		}
-		
+
 		if (statement instanceof Return) {
 			Return ret = (Return) statement;
 			visitExpression(tool, ret.getExpression());
 		}
 	}
-	
+
 	@Override
 	public void visitExpression(CheckTool tool, Expression expression) {
 		if (expression instanceof IMPDiv) {
 			IMPDiv division = (IMPDiv) expression;
 			Expression right = division.getParameters()[1];
-			
-			if ((right instanceof IMPIntLiteral && (int) ((IMPIntLiteral) right).getValue() == 0) 
-					|| (right instanceof IMPFloatLiteral && (float) ((IMPIntLiteral) right).getValue() == 0.0) )
+
+			if ((right instanceof IMPIntLiteral && (int) ((IMPIntLiteral) right).getValue() == 0)
+					|| (right instanceof IMPFloatLiteral && (float) ((IMPIntLiteral) right).getValue() == 0.0))
 				tool.warnOn(division, "[definite] Found division by zero!");
 			else
-				tool.warnOn(expression, "[possible] Maybe division by zero!" );
+				tool.warnOn(expression, "[possible] Maybe division by zero!");
 		}
-		
+
 		if (expression instanceof Call) {
 			Call call = (Call) expression;
 			for (Expression exp : call.getParameters())
@@ -54,6 +56,7 @@ public class DivisionByZeroCheck implements SyntacticCheck {
 	}
 
 	@Override
-	public void afterExecution(CheckTool tool) {}
+	public void afterExecution(CheckTool tool) {
+	}
 
 }

@@ -3,8 +3,9 @@ package it.unive.lisa.analysis;
 import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.ValueExpression;
 
-public class ValueCartesianProduct<T1 extends ValueDomain<T1>, T2 extends ValueDomain<T2>> extends CartesianProduct<T1, T2, ValueExpression, Identifier> 
-implements ValueDomain<ValueCartesianProduct<T1, T2>> {
+public class ValueCartesianProduct<T1 extends ValueDomain<T1>, T2 extends ValueDomain<T2>>
+		extends CartesianProduct<T1, T2, ValueExpression, Identifier>
+		implements ValueDomain<ValueCartesianProduct<T1, T2>> {
 
 	public ValueCartesianProduct(T1 left, T2 right) {
 		super(left, right);

@@ -12,12 +12,12 @@ import it.unive.lisa.symbolic.value.UnaryOperator;
 
 public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
-	private enum Values { 
-		ODD, 
-		EVEN, 
-		TOP, 
+	private enum Values {
+		ODD,
+		EVEN,
+		TOP,
 		BOT
-	} 
+	}
 
 	private final Values parity;
 
@@ -52,10 +52,14 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 	@Override
 	public String representation() {
 		switch (parity) {
-		case BOT: return "BOT";
-		case ODD: return "Odd";
-		case EVEN: return "Even";
-		default: return "TOP";
+		case BOT:
+			return "BOT";
+		case ODD:
+			return "Odd";
+		case EVEN:
+			return "Even";
+		default:
+			return "TOP";
 		}
 	}
 
@@ -106,7 +110,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 			return arg;
 		default:
 			return top();
-		}		
+		}
 	}
 
 	@Override
@@ -127,7 +131,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 		case NUMERIC_DIV:
 			if (left.isOdd())
 				return right.isOdd() ? odd() : even();
-			else 
+			else
 				return right.isOdd() ? even() : top();
 		case NUMERIC_MOD:
 			return top();
@@ -143,7 +147,7 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 
 	@Override
 	protected Parity lubAux(Parity other) throws SemanticException {
-		return equals(other) ? other: top();
+		return equals(other) ? other : top();
 	}
 
 	@Override
@@ -187,7 +191,8 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 	}
 
 	@Override
-	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Parity left, Parity middle, Parity right) {
+	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Parity left, Parity middle,
+			Parity right) {
 		return Satisfiability.UNKNOWN;
 	}
 

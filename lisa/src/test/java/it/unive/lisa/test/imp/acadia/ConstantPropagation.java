@@ -23,7 +23,7 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 	public ConstantPropagation() {
 		this(null, true, false);
 	}
-	
+
 	private ConstantPropagation(Integer value, boolean isTop, boolean isBottom) {
 		this.value = value;
 		this.isTop = isTop;
@@ -60,7 +60,7 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	public String representation() {
-		return isTop() ? "Non-constant" : isBottom() ?  "Bot" : value.toString();
+		return isTop() ? "Non-constant" : isBottom() ? "Bot" : value.toString();
 	}
 
 	@Override
@@ -93,8 +93,9 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 	}
 
 	@Override
-	protected ConstantPropagation evalBinaryExpression(BinaryOperator operator, ConstantPropagation left, ConstantPropagation right) {
-		switch(operator) {
+	protected ConstantPropagation evalBinaryExpression(BinaryOperator operator, ConstantPropagation left,
+			ConstantPropagation right) {
+		switch (operator) {
 		case NUMERIC_ADD:
 			return new ConstantPropagation(left.value + right.value);
 		case NUMERIC_DIV:
@@ -114,7 +115,8 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 	}
 
 	@Override
-	protected ConstantPropagation evalTernaryExpression(TernaryOperator operator, ConstantPropagation left, ConstantPropagation middle, ConstantPropagation right) {
+	protected ConstantPropagation evalTernaryExpression(TernaryOperator operator, ConstantPropagation left,
+			ConstantPropagation middle, ConstantPropagation right) {
 		return top();
 	}
 
@@ -195,8 +197,8 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 		if (left.isTop() || right.isTop())
 			return Satisfiability.UNKNOWN;
- 
-		switch(operator) {
+
+		switch (operator) {
 		case COMPARISON_EQ:
 			return left.value == right.value ? Satisfiability.SATISFIED : Satisfiability.NOT_SATISFIED;
 		case COMPARISON_GE:

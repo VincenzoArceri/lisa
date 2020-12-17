@@ -14,18 +14,17 @@ public class Prefix extends BaseNonRelationalValueDomain<Prefix> {
 
 	private static final Prefix TOP = new Prefix("");
 	private static final Prefix BOTTOM = new Prefix();
-	
+
 	private String prefix;
-	
-	
+
 	private Prefix(String prefix) {
 		this.prefix = prefix;
 	}
-	
+
 	public Prefix() {
 		this.prefix = null;
 	}
-	
+
 	@Override
 	public Prefix top() {
 		return TOP;
@@ -60,7 +59,7 @@ public class Prefix extends BaseNonRelationalValueDomain<Prefix> {
 
 	@Override
 	protected Prefix evalUnaryExpression(UnaryOperator operator, Prefix arg) {
-		switch(operator) {
+		switch (operator) {
 		case LOGICAL_NOT:
 			break;
 		case NUMERIC_NEG:
@@ -78,8 +77,8 @@ public class Prefix extends BaseNonRelationalValueDomain<Prefix> {
 	protected Prefix evalBinaryExpression(BinaryOperator operator, Prefix left, Prefix right) {
 		if (left.isBottom() || right.isBottom())
 			return bottom();
-		
-		switch(operator) {
+
+		switch (operator) {
 		case COMPARISON_EQ:
 		case COMPARISON_GE:
 		case COMPARISON_GT:
@@ -107,23 +106,23 @@ public class Prefix extends BaseNonRelationalValueDomain<Prefix> {
 
 		return bottom();
 	}
-	
+
 	private String greatestCommonPrefix(String a, String b) {
-	    int minLength = Math.min(a.length(), b.length());
-	    for (int i = 0; i < minLength; i++) {
-	        if (a.charAt(i) != b.charAt(i)) {
-	            return a.substring(0, i);
-	        }
-	    }
-	    return a.substring(0, minLength);
+		int minLength = Math.min(a.length(), b.length());
+		for (int i = 0; i < minLength; i++) {
+			if (a.charAt(i) != b.charAt(i)) {
+				return a.substring(0, i);
+			}
+		}
+		return a.substring(0, minLength);
 	}
 
 	@Override
 	protected Prefix evalTernaryExpression(TernaryOperator operator, Prefix left, Prefix middle, Prefix right) {
 		if (left.isBottom() || right.isBottom() || middle.isBottom())
 			return bottom();
-		
-		switch(operator) {
+
+		switch (operator) {
 		case STRING_REPLACE:
 			break;
 		case STRING_SUBSTRING:
@@ -131,7 +130,7 @@ public class Prefix extends BaseNonRelationalValueDomain<Prefix> {
 		default:
 			break;
 		}
-		
+
 		return bottom();
 	}
 

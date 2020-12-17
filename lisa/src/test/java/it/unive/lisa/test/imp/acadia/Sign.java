@@ -11,21 +11,21 @@ import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
 
 public class Sign extends BaseNonRelationalValueDomain<Sign> {
-	
-	private enum Values { 
-		POS, 
-		NEG, 
-		ZERO, 
-		TOP, 
+
+	private enum Values {
+		POS,
+		NEG,
+		ZERO,
+		TOP,
 		BOT
-	} 
-	
+	}
+
 	private final Values sign;
 
 	private Sign(Values sign) {
 		this.sign = sign;
 	}
-	
+
 	public Sign() {
 		this(Values.TOP);
 	}
@@ -34,12 +34,12 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 	public Sign top() {
 		return new Sign(Values.TOP);
 	}
-	
+
 	@Override
 	public boolean isTop() {
 		return getSign() == Values.TOP;
 	}
-	
+
 	@Override
 	public boolean isBottom() {
 		return getSign() == Values.BOT;
@@ -53,14 +53,19 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 	@Override
 	public String representation() {
 		switch (sign) {
-		case BOT: return "Bottom";
-		case NEG: return "-";
-		case POS: return "+";
-		case ZERO: return "0";
-		default: return "Unknown sign";
+		case BOT:
+			return "Bottom";
+		case NEG:
+			return "-";
+		case POS:
+			return "+";
+		case ZERO:
+			return "0";
+		default:
+			return "Unknown sign";
 		}
 	}
-	
+
 	public Values getSign() {
 		return sign;
 	}
@@ -76,18 +81,18 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			Integer i = (Integer) constant.getValue();
 			return i == 0 ? zero() : i > 0 ? pos() : neg();
 		}
-		
+
 		return top();
 	}
-	
+
 	private Sign pos() {
 		return new Sign(Values.POS);
 	}
-	
+
 	private Sign neg() {
 		return new Sign(Values.NEG);
 	}
-	
+
 	private Sign zero() {
 		return new Sign(Values.ZERO);
 	}
@@ -95,21 +100,21 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 	private boolean isPositive() {
 		return sign == Values.POS;
 	}
-	
+
 	private boolean isZero() {
 		return sign == Values.ZERO;
 	}
-	
+
 	private boolean isNegative() {
 		return sign == Values.NEG;
 	}
-	
+
 	private Sign opposite() {
 		if (isTop() || isBottom())
 			return this;
 		return isPositive() ? neg() : isNegative() ? pos() : zero();
 	}
-	
+
 	@Override
 	protected Sign evalTypeConversion(Type type, Sign arg) {
 		return top();
@@ -129,7 +134,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return top();
 		default:
 			return top();
-		}				
+		}
 	}
 
 	@Override
@@ -152,7 +157,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			else if (left.equals(right))
 				return top();
 			else
-				return left; 
+				return left;
 		case NUMERIC_DIV:
 			if (right.isZero())
 				return bottom();
@@ -181,7 +186,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 
 	@Override
 	protected Sign lubAux(Sign other) throws SemanticException {
-		return equals(other) ? other: top();
+		return equals(other) ? other : top();
 	}
 
 	@Override
@@ -245,8 +250,8 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 	protected Satisfiability satisfiesBinaryExpression(BinaryOperator operator, Sign left, Sign right) {
 		if (left.isTop() || right.isTop())
 			return Satisfiability.UNKNOWN;
-		
-		switch(operator) {
+
+		switch (operator) {
 		case COMPARISON_EQ:
 			return left.eq(right);
 		case COMPARISON_GE:
@@ -255,7 +260,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 			return left.gt(right);
 		case COMPARISON_LE: // e1 <= e2 same as !(e1 > e2)
 			return left.gt(right).negate();
-		case COMPARISON_LT: // e1 < e2 -> !(e1 >= e2) && !(e1 == e2) 
+		case COMPARISON_LT: // e1 < e2 -> !(e1 >= e2) && !(e1 == e2)
 			return left.gt(right).negate().and(left.eq(right).negate());
 		case COMPARISON_NE:
 			return left.eq(right).negate();
@@ -272,7 +277,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		else
 			return Satisfiability.UNKNOWN;
 	}
-	
+
 	private Satisfiability gt(Sign other) {
 		if (this.equals(other))
 			return this.isZero() ? Satisfiability.NOT_SATISFIED : Satisfiability.UNKNOWN;
@@ -283,7 +288,7 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 		else
 			return Satisfiability.NOT_SATISFIED;
 	}
-	
+
 	@Override
 	protected Satisfiability satisfiesTernaryExpression(TernaryOperator operator, Sign left, Sign middle, Sign right) {
 		return Satisfiability.UNKNOWN;

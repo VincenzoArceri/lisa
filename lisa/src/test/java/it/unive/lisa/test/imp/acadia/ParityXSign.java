@@ -9,7 +9,7 @@ public class ParityXSign extends ValueCartesianProduct<ValueEnvironment<Parity>,
 	public ParityXSign() {
 		super(new ValueEnvironment<Parity>(new Parity()), new ValueEnvironment<Sign>(new Sign()));
 	}
-	
+
 	@Override
 	public String representation() {
 		String result = "";

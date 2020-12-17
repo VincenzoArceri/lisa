@@ -9,7 +9,7 @@ public class Pentagon extends ValueCartesianProduct<ValueEnvironment<Interval>, 
 	public Pentagon() {
 		super(new ValueEnvironment<Interval>(new Interval()), new UpperBoundsEnvironment());
 	}
-	
+
 	@Override
 	public String representation() {
 		String result = "";

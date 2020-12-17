@@ -1,13 +1,5 @@
 package it.unive.lisa.analysis.heap;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import it.unive.lisa.analysis.BaseHeapDomain;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.caches.Caches;
@@ -20,13 +12,19 @@ import it.unive.lisa.symbolic.value.HeapIdentifier;
 import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.Skip;
 import it.unive.lisa.symbolic.value.ValueExpression;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.apache.commons.collections.CollectionUtils;
 
 public class ClassBasedHeap extends BaseHeapDomain<ClassBasedHeap> {
 
 	private static final ClassBasedHeap TOP = new ClassBasedHeap();
 	private static final ClassBasedHeap BOTTOM = new ClassBasedHeap(null);
 	private final Collection<ValueExpression> rewritten;
-	
+
 	private static final Set<String> ids = new HashSet<String>();
 
 	public ClassBasedHeap() {
@@ -103,7 +101,8 @@ public class ClassBasedHeap extends BaseHeapDomain<ClassBasedHeap> {
 			String classPointer = alloc.getDynamicType().toString();
 			ids.add(classPointer);
 			return new ClassBasedHeap(
-					Collections.singleton(new HeapIdentifier(Caches.types().mkSingletonSet(alloc.getDynamicType()), classPointer)));
+					Collections.singleton(
+							new HeapIdentifier(Caches.types().mkSingletonSet(alloc.getDynamicType()), classPointer)));
 		}
 
 		if (expression instanceof HeapReference) {
@@ -115,9 +114,10 @@ public class ClassBasedHeap extends BaseHeapDomain<ClassBasedHeap> {
 			String classPointer = acc.getDynamicType().toString();
 			ids.add(classPointer);
 			return new ClassBasedHeap(
-					Collections.singleton(new HeapIdentifier(Caches.types().mkSingletonSet(acc.getDynamicType()), classPointer)));
+					Collections.singleton(
+							new HeapIdentifier(Caches.types().mkSingletonSet(acc.getDynamicType()), classPointer)));
 		}
-		
+
 		return top();
 	}
 

@@ -15,9 +15,9 @@ public abstract class BaseLattice<L extends BaseLattice<L>> implements Lattice<L
 	@Override
 	@SuppressWarnings("unchecked")
 	public final L lub(L other) throws SemanticException {
-		if (other == null || other.isBottom() || this.isTop() || this == other || this.equals(other)) 
+		if (other == null || other.isBottom() || this.isTop() || this == other || this.equals(other))
 			return (L) this;
-		
+
 		if (this.isBottom() || other.isTop())
 			return other;
 

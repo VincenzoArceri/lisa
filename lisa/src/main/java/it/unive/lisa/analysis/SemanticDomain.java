@@ -106,7 +106,7 @@ public interface SemanticDomain<D extends SemanticDomain<D, E, I>, E extends Sym
 	 * 
 	 * @throws SemanticException if an error occurs during the computation
 	 */
-	 Satisfiability satisfies(E expression) throws SemanticException;
+	Satisfiability satisfies(E expression) throws SemanticException;
 
 	/**
 	 * The satisfiability of an expression.

@@ -1,8 +1,5 @@
 package it.unive.lisa.test.imp.acadia;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;
 import it.unive.lisa.analysis.nonrelational.BaseNonRelationalValueDomain;
@@ -12,8 +9,10 @@ import it.unive.lisa.symbolic.value.Constant;
 import it.unive.lisa.symbolic.value.Identifier;
 import it.unive.lisa.symbolic.value.TernaryOperator;
 import it.unive.lisa.symbolic.value.UnaryOperator;
+import java.util.HashSet;
+import java.util.Set;
 
-public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
+public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion> {
 
 	private static final CharInclusion TOP = new CharInclusion(null, null);
 	private static final CharInclusion BOTTOM = new CharInclusion();
@@ -70,7 +69,7 @@ public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
 	@Override
 	protected CharInclusion evalUnaryExpression(UnaryOperator operator, CharInclusion arg) {
 
-		switch(operator) {
+		switch (operator) {
 		case LOGICAL_NOT:
 			break;
 		case NUMERIC_NEG:
@@ -83,8 +82,6 @@ public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
 
 		return bottom();
 	}
-
-
 
 	public Set<Character> getMust() {
 		return must;
@@ -105,7 +102,7 @@ public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
 	@Override
 	protected CharInclusion evalBinaryExpression(BinaryOperator operator, CharInclusion left, CharInclusion right) {
 
-		switch(operator) {
+		switch (operator) {
 		case COMPARISON_EQ:
 			break;
 		case COMPARISON_GE:
@@ -152,8 +149,9 @@ public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
 	}
 
 	@Override
-	protected CharInclusion evalTernaryExpression(TernaryOperator operator, CharInclusion left, CharInclusion middle, CharInclusion right) {
-		switch(operator) {
+	protected CharInclusion evalTernaryExpression(TernaryOperator operator, CharInclusion left, CharInclusion middle,
+			CharInclusion right) {
+		switch (operator) {
 		case STRING_REPLACE:
 			break;
 		case STRING_SUBSTRING:
@@ -175,7 +173,7 @@ public class CharInclusion extends BaseNonRelationalValueDomain<CharInclusion>{
 		for (Character c : must)
 			if (other.getMust().contains(c))
 				mustLub.add(c);
-			else 
+			else
 				mayLub.add(c);
 
 		for (Character c : other.getMust())
