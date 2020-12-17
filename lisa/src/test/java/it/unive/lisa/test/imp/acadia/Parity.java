@@ -104,8 +104,6 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 		switch (operator) {
 		case NUMERIC_NEG:
 			return arg;
-		case STRING_LENGTH: 
-			return top();
 		default:
 			return top();
 		}		
@@ -124,17 +122,13 @@ public class Parity extends BaseNonRelationalValueDomain<Parity> {
 		case NUMERIC_MUL:
 			if (left.isEven() || right.isEven())
 				return even();
-			else if (left.isTop() || right.isTop())
-				return top();
 			else
 				return odd();
 		case NUMERIC_DIV:
 			if (left.isOdd())
-				return odd();
-			else if (right.isOdd())
-				return even();
+				return right.isOdd() ? odd() : even();
 			else 
-				return top();
+				return right.isOdd() ? even() : top();
 		case NUMERIC_MOD:
 			return top();
 		default:

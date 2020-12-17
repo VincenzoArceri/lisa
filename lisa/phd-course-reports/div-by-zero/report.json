@@ -1,4 +1,0 @@
-{
-  "warnings" : [ ],
-  "files" : [ "analysis___untyped_constants(untyped_a).dot", "analysis___untyped_div(untyped_i,_untyped_j).dot", "analysis___untyped_gcd(untyped_a,_untyped_b).dot", "analysis___untyped_intv_dec(untyped_c,_untyped_d).dot", "analysis___untyped_sign_parity_example().dot", "analysis___untyped_ub_example().dot" ]
-}

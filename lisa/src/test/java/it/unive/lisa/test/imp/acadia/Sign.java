@@ -127,8 +127,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return zero();
 			else
 				return top();
-		case STRING_LENGTH: 
-			return top();
 		default:
 			return top();
 		}				
@@ -146,24 +144,6 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return left;
 			else
 				return top();
-		case NUMERIC_DIV:
-			if (right.isZero())
-				return bottom();
-			else if (left.isZero())
-				return zero();
-			else if (left.equals(right))
-				return pos();
-			else
-				return neg();
-		case NUMERIC_MOD:
-			return top();
-		case NUMERIC_MUL:
-			if (left.isZero() || right.isZero())
-				return zero();
-			else if (left.equals(right))
-				return pos();
-			else
-				return neg();
 		case NUMERIC_SUB:
 			if (left.isZero())
 				return right.opposite();
@@ -173,6 +153,22 @@ public class Sign extends BaseNonRelationalValueDomain<Sign> {
 				return top();
 			else
 				return left; 
+		case NUMERIC_DIV:
+			if (right.isZero())
+				return bottom();
+			else if (left.isZero())
+				return zero();
+			else if (left.equals(right))
+				return top();
+		case NUMERIC_MOD:
+			return top();
+		case NUMERIC_MUL:
+			if (left.isZero() || right.isZero())
+				return zero();
+			else if (left.equals(right))
+				return pos();
+			else
+				return neg();
 		default:
 			return top();
 		}
