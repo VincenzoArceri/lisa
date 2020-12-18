@@ -74,6 +74,7 @@ public abstract class BaseNonRelationalValueDomain<T extends BaseNonRelationalVa
 			else {
 				T left = eval((ValueExpression) binary.getLeft(), environment);
 				T right = eval((ValueExpression) binary.getRight(), environment);
+
 				if (left.isBottom() || right.isBottom())
 					return Satisfiability.BOTTOM;
 				return satisfiesBinaryExpression(binary.getOperator(), left, right);
