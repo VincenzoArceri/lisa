@@ -1,4 +1,4 @@
-package it.unive.lisa.test.imp.acadia;
+package it.unive.lisa.test.imp.tutorial.interval;
 
 import java.util.SortedSet;
 import java.util.TreeSet;

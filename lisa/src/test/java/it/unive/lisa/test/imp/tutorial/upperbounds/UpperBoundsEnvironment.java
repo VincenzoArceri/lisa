@@ -1,4 +1,4 @@
-package it.unive.lisa.test.imp.acadia;
+package it.unive.lisa.test.imp.tutorial.upperbounds;
 
 import it.unive.lisa.analysis.FunctionalLattice;
 import it.unive.lisa.analysis.SemanticException;

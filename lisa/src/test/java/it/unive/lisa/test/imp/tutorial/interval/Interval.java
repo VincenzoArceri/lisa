@@ -1,4 +1,4 @@
-package it.unive.lisa.test.imp.acadia;
+package it.unive.lisa.test.imp.tutorial.interval;
 
 import it.unive.lisa.analysis.SemanticDomain.Satisfiability;
 import it.unive.lisa.analysis.SemanticException;

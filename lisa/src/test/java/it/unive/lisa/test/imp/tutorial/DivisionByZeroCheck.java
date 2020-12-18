@@ -1,4 +1,4 @@
-package it.unive.lisa.test.imp.acadia;
+package it.unive.lisa.test.imp.tutorial;
 
 import it.unive.lisa.cfg.CFGDescriptor;
 import it.unive.lisa.cfg.statement.Assignment;

@@ -7,7 +7,8 @@ import it.unive.lisa.LiSA;
 import it.unive.lisa.cfg.CFG;
 import it.unive.lisa.test.imp.IMPFrontend;
 import it.unive.lisa.test.imp.ParsingException;
-import it.unive.lisa.test.imp.acadia.UpperBoundsEnvironment;
+import it.unive.lisa.test.imp.tutorial.upperbounds.UpperBoundsEnvironment;
+
 import java.io.IOException;
 import java.util.Collection;
 

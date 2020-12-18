@@ -1,8 +1,10 @@
-package it.unive.lisa.test.imp.acadia;
+package it.unive.lisa.test.imp.tutorial;
 
 import it.unive.lisa.analysis.ValueCartesianProduct;
 import it.unive.lisa.analysis.nonrelational.ValueEnvironment;
 import it.unive.lisa.symbolic.value.Identifier;
+import it.unive.lisa.test.imp.tutorial.interval.Interval;
+import it.unive.lisa.test.imp.tutorial.upperbounds.UpperBoundsEnvironment;
 
 public class Pentagon extends ValueCartesianProduct<ValueEnvironment<Interval>, UpperBoundsEnvironment> {
 
