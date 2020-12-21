@@ -132,7 +132,7 @@ public class ConstantPropagation extends BaseNonRelationalValueDomain<ConstantPr
 
 	@Override
 	protected boolean lessOrEqualAux(ConstantPropagation other) throws SemanticException {
-		return value <= other.value;
+		return value == other.value;
 	}
 
 	@Override
